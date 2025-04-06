@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
 
-function Main() {
-  return (
-    <div ></div>
-  )
+function Main( {children} ) {
+  return <div className="main">
+    {children}
+  </div>;
 }
 
-export default Main
+export default Main;

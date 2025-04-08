@@ -11,6 +11,8 @@ const initialState = {
   // loading , error , ready , active , finished
   status: "loading",
   index: 0,
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -19,15 +21,23 @@ function reducer(state, action) {
       return { ...state, questions: action.payload, status: "ready" };
     case "dataFailed":
       return { ...state, status: "error" };
-      case 'start':
-        return { ...state, status: 'active'}
+    case "start":
+      return { ...state, status: "active" };
+    case "newAnswer":
+      return 
+      const question = state.questions[state.index];
+      { ...state, answer: action.payload , points: action.payload === question.correctOption ? state.points + 1 : state.points};
+
     default:
       throw new Error("Unknown action type");
   }
 }
 
 export default function App() {
-  const [{ questions, status , index}, dispatch] = useReducer(reducer, initialState); // Fixed destructuring
+  const [{ questions, status, index ,answer}, dispatch] = useReducer(
+    reducer,
+    initialState
+  ); // Fixed destructuring
 
   const numQuestions = questions.length;
 
@@ -44,10 +54,12 @@ export default function App() {
       <Main>
         {status === "loading" && <Loading />}
         {status === "error" && <Error />}
-        {status === "ready" && <StartScreen numQuestions = {numQuestions} 
-        dispatch={dispatch}/>}
+        {status === "ready" && (
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
 
-        {status ===  "active" && <Question question={ questions[index] }/>}
+        {status === "active" && <Question question={questions[index]} 
+        dispatch={dispatch} answer = {answer}/>}
       </Main>
     </div>
   );
